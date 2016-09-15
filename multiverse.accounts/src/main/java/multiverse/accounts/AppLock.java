@@ -28,7 +28,7 @@ public class AppLock {
 				new AccountLock(100), new AccountLock(0), 
 				new AccountLock(100), new AccountLock(0), };
 
-		final Callable work = () ->
+		final Callable<Void> work = () ->
 		{
 			
 			while (true) {
@@ -107,7 +107,8 @@ public class AppLock {
 	
 	public static int sum(final AccountLock[] accounts) throws Exception {
 		final AccountLock[] tmp = accounts.clone();
-		Arrays.sort(tmp, (AccountLock acc1, AccountLock acc2) -> {return acc1.id - acc2.id;});
+		final Comparator<AccountLock> comparator = (acc1,  acc2) -> {return acc1.id - acc2.id;};
+		Arrays.sort(tmp, comparator);
 		/*Arrays.sort(tmp, new Comparator<AccountLock>() {
 			public int compare(AccountLock acc1, AccountLock acc2) {
 				return acc1.id - acc2.id;
