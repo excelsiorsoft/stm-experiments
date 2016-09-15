@@ -77,7 +77,6 @@ public class AppLock {
 		final AccountLock[] tmp = accounts.clone();
 		final Comparator<AccountLock> comparator = (acc1,  acc2) -> {return acc1.id - acc2.id;};
 		Arrays.sort(tmp, comparator);
-
 		
 		
 		
