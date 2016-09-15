@@ -1,7 +1,7 @@
 /**
  * 
  */
-package multiverse.accounts;
+package account.transfer.locking;
 
 import java.util.Arrays;
 import java.util.Comparator;
