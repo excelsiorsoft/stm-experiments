@@ -28,7 +28,7 @@ public class AppLock {
 				new AccountLock(100), new AccountLock(0), 
 				new AccountLock(100), new AccountLock(0), };
 
-		final Callable work = () ->
+		final Callable<Void> work = () ->
 		{
 			
 			while (true) {
@@ -43,38 +43,6 @@ public class AppLock {
 		
 		for (int k = 0; k < 4 * Runtime.getRuntime().availableProcessors(); k++) {
 			exec.submit(work);
-					
-					/*() ->{
-						while (true) {
-
-							int from = rnd.nextInt(accounts.length);
-							int to = rnd.nextInt(accounts.length);
-							if (from != to) {
-								int delta = rnd.nextInt(50);
-								  transfer(accounts[from], accounts[to], delta);
-							}
-						}
-					});*/
-			
-					/*new Runnable() {
-				{setDaemon(true);}
-				public void run() {
-					while (true) {
-
-						int from = rnd.nextInt(accounts.length);
-						int to = rnd.nextInt(accounts.length);
-						if (from != to) {
-							int delta = rnd.nextInt(50);
-							  transfer(accounts[from], accounts[to], delta);
-						}
-					}
-				}
-
-				
-
-			}*/
-					
-					
 		}
 		
 		Thread.sleep(1000);
@@ -107,13 +75,9 @@ public class AppLock {
 	
 	public static int sum(final AccountLock[] accounts) throws Exception {
 		final AccountLock[] tmp = accounts.clone();
-		Arrays.sort(tmp, (AccountLock acc1, AccountLock acc2) -> {return acc1.id - acc2.id;});
-		/*Arrays.sort(tmp, new Comparator<AccountLock>() {
-			public int compare(AccountLock acc1, AccountLock acc2) {
-				return acc1.id - acc2.id;
-			}
-			
-		});*/
+		final Comparator<AccountLock> comparator = (acc1,  acc2) -> {return acc1.id - acc2.id;};
+		Arrays.sort(tmp, comparator);
+
 		
 		
 		
@@ -123,42 +87,17 @@ public class AppLock {
 				result += acc.getBalance();
 			}
 			return result;
-		}
-				
-				
-				/*new Callable<Integer>() {
-			public Integer call() throws Exception {
-				int result = 0;
-				for(AccountLock acc : tmp) {
-					result += acc.getBalance();
-				}
-				return result;
-			}
-			
-		}*/);
+		});
 
 		
 	}
 	
 	public static String toStr(final AccountLock[] accounts) throws Exception {
 		final AccountLock[] tmp = accounts.clone();
-		Arrays.sort(tmp, (AccountLock acc1, AccountLock acc2) -> (acc1.id - acc2.id)
-				
-				/*new Comparator<AccountLock>() {
-
-			public int compare(AccountLock acc1, AccountLock acc2) {
-				return acc1.id - acc2.id;
-			}}*/);
 		
-		return lockRecursively(tmp, () ->  Arrays.toString(tmp)
-				
-				/*new Callable<String>() {
-
-			public String call() throws Exception {
-				return Arrays.toString(tmp);
-			}
-			
-		}*/);
+		Arrays.sort(tmp, (AccountLock acc1, AccountLock acc2) -> (acc1.id - acc2.id));
+		
+		return lockRecursively(tmp, () ->  Arrays.toString(tmp));
 	}
 	
 	private static <T> T lockRecursively(AccountLock[] accounts, Callable<T>callable) throws Exception {
