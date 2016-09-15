@@ -3,4 +3,11 @@
   <groupId>com.excelsiorsoft.stm-experiments</groupId>
   <artifactId>multiverse.accounts</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  <dependencies>
+  	<dependency>
+  		<groupId>org.multiverse</groupId>
+  		<artifactId>multiverse</artifactId>
+  		<version>0.7-RC-1</version>
+  	</dependency>
+  </dependencies>
 </project>
