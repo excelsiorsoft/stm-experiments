@@ -6,7 +6,6 @@ package accounts.multiverse.stm;
 import static org.multiverse.api.StmUtils.atomic;
 
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -14,7 +13,6 @@ import java.util.concurrent.Executors;
 
 import org.multiverse.api.StmUtils;
 import org.multiverse.api.Txn;
-import org.multiverse.api.callables.TxnIntCallable;
 import org.multiverse.api.exceptions.DeadTxnException;
 
 /**
