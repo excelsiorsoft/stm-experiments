@@ -14,7 +14,7 @@ import java.util.concurrent.Executors;
  * @author Simeon
  *
  */
-public class AppLock {
+public class Application {
 
 	static Random rnd = new Random();
 	static ExecutorService exec = Executors.newCachedThreadPool();
