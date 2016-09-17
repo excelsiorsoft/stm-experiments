@@ -3,9 +3,10 @@
  */
 package accounts.multiverse.stm;
 
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import static org.multiverse.api.StmUtils.abort;
+
+import org.multiverse.api.StmUtils;
+import org.multiverse.api.references.TxnInteger;
 
 /**
  * @author Simeon
@@ -13,32 +14,28 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class Account {
 
-	private final static AtomicInteger idGenerator = new AtomicInteger();
-	public final int id = idGenerator.getAndIncrement();
-	public final Lock lock = new ReentrantLock();
-	private int balance;
+	
+	private final TxnInteger balance;
 	
 	public Account(int balance) {
-		this.balance = balance;
+		this.balance = StmUtils.newTxnInteger(balance);
 	}
 	
-	public boolean chgBalance(int amount) {
-		if(balance + amount>=0) {
-			balance += amount;
-			return true;
-		}else {
-			return false;
+	public void chgBalance(final int amount) {
+		balance.increment(amount);
+		if(balance.get() < 0) {
+			abort();
 		}
 	}
 	
 	
 	public int getBalance() {
-		return balance;
+		return balance.get();
 	}
 	
 	@Override
 	public String toString() {
-		return "AccountLock [id=" + id + ", balance=" + balance + "]";
+		return "AccountLock [balance=" + balance + "]";
 	}
 
 }

@@ -6,8 +6,8 @@
   <dependencies>
   	<dependency>
   		<groupId>org.multiverse</groupId>
-  		<artifactId>multiverse</artifactId>
-  		<version>0.7-RC-1</version>
+  		<artifactId>multiverse-core</artifactId>
+  		<version>0.7.0</version>
   	</dependency>
   </dependencies>
 </project>
