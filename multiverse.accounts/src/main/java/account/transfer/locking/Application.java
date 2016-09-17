@@ -14,19 +14,19 @@ import java.util.concurrent.Executors;
  * @author Simeon
  *
  */
-public class AppLock {
+public class Application {
 
 	static Random rnd = new Random();
 	static ExecutorService exec = Executors.newCachedThreadPool();
 
 	public static void main(String[] args) throws Exception {
 
-		final AccountLock[] accounts = new AccountLock[] {
-				new AccountLock(100), new AccountLock(0), 
-				new AccountLock(100), new AccountLock(0), 
-				new AccountLock(100), new AccountLock(0),
-				new AccountLock(100), new AccountLock(0), 
-				new AccountLock(100), new AccountLock(0), };
+		final Account[] accounts = new Account[] {
+				new Account(100), new Account(0), 
+				new Account(100), new Account(0), 
+				new Account(100), new Account(0),
+				new Account(100), new Account(0), 
+				new Account(100), new Account(0), };
 
 		final Callable<Void> work = () ->
 		{
@@ -51,10 +51,10 @@ public class AppLock {
 		
 	}
 	
-	private static void transfer(AccountLock from, AccountLock to, int amount) {
+	private static void transfer(Account from, Account to, int amount) {
 		
-		AccountLock fst = (from.id < to.id) ? from : to;
-		AccountLock snd = (from.id >= to.id) ? from : to;
+		Account fst = (from.id < to.id) ? from : to;
+		Account snd = (from.id >= to.id) ? from : to;
 		
 		fst.lock.lock();
 		try {
@@ -73,16 +73,16 @@ public class AppLock {
 		}
 	}
 	
-	public static int sum(final AccountLock[] accounts) throws Exception {
-		final AccountLock[] tmp = accounts.clone();
-		final Comparator<AccountLock> comparator = (acc1,  acc2) -> {return acc1.id - acc2.id;};
+	public static int sum(final Account[] accounts) throws Exception {
+		final Account[] tmp = accounts.clone();
+		final Comparator<Account> comparator = (acc1,  acc2) -> {return acc1.id - acc2.id;};
 		Arrays.sort(tmp, comparator);
 		
 		
 		
 		return lockRecursively(tmp, () -> {
 			int result = 0;
-			for(AccountLock acc : tmp) {
+			for(Account acc : tmp) {
 				result += acc.getBalance();
 			}
 			return result;
@@ -91,15 +91,15 @@ public class AppLock {
 		
 	}
 	
-	public static String toStr(final AccountLock[] accounts) throws Exception {
-		final AccountLock[] tmp = accounts.clone();
+	public static String toStr(final Account[] accounts) throws Exception {
+		final Account[] tmp = accounts.clone();
 		
-		Arrays.sort(tmp, (AccountLock acc1, AccountLock acc2) -> (acc1.id - acc2.id));
+		Arrays.sort(tmp, (Account acc1, Account acc2) -> (acc1.id - acc2.id));
 		
 		return lockRecursively(tmp, () ->  Arrays.toString(tmp));
 	}
 	
-	private static <T> T lockRecursively(AccountLock[] accounts, Callable<T>callable) throws Exception {
+	private static <T> T lockRecursively(Account[] accounts, Callable<T>callable) throws Exception {
 		if(accounts.length > 0) {
 			accounts[0].lock.lock();
 			try {
