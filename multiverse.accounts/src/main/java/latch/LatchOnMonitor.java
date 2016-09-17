@@ -17,7 +17,7 @@ public class LatchOnMonitor {
 	}
 	
 	public synchronized void await() throws InterruptedException{
-		while(!open) {
+		while(!open) {//spurious wake up
 			this.wait();
 		}
 	}
