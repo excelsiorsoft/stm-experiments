@@ -1,7 +1,7 @@
 /**
  * 
  */
-package multiverse.accounts.locking;
+package accounts.multiverse.stm;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
