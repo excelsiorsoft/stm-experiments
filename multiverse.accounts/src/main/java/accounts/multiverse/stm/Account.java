@@ -11,14 +11,14 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author Simeon
  *
  */
-public class AccountLock {
+public class Account {
 
 	private final static AtomicInteger idGenerator = new AtomicInteger();
 	public final int id = idGenerator.getAndIncrement();
 	public final Lock lock = new ReentrantLock();
 	private int balance;
 	
-	public AccountLock(int balance) {
+	public Account(int balance) {
 		this.balance = balance;
 	}
 	
