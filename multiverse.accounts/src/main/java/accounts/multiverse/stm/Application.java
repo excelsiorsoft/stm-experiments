@@ -3,12 +3,19 @@
  */
 package accounts.multiverse.stm;
 
+import static org.multiverse.api.StmUtils.atomic;
+
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import org.multiverse.api.StmUtils;
+import org.multiverse.api.Txn;
+import org.multiverse.api.callables.TxnIntCallable;
+import org.multiverse.api.exceptions.DeadTxnException;
 
 /**
  * @author Simeon
@@ -51,66 +58,39 @@ public class Application {
 		
 	}
 	
-	private static void transfer(Account from, Account to, int amount) {
-		
-		Account fst = (from.id < to.id) ? from : to;
-		Account snd = (from.id >= to.id) ? from : to;
-		
-		fst.lock.lock();
+	private static boolean transfer(Account from, Account to, int amount) {
+
 		try {
-			snd.lock.lock();
-			try {
-				if(from.chgBalance(-amount)) {
-					if(!to.chgBalance(+amount)) {
-						from.chgBalance(+amount);
-					}
+			StmUtils.atomic(
+				() -> {
+					from.chgBalance(-amount);
+					to.chgBalance(+amount);
 				}
-			}finally {
-				snd.lock.unlock();
-			}
-		}finally {
-			fst.lock.unlock();
+			);
+			return true;
+		} catch (DeadTxnException e) {
+			return false;
 		}
 	}
 	
-	public static int sum(final Account[] accounts) throws Exception {
-		final Account[] tmp = accounts.clone();
-		final Comparator<Account> comparator = (acc1,  acc2) -> {return acc1.id - acc2.id;};
-		Arrays.sort(tmp, comparator);
-		
-		
-		
-		return lockRecursively(tmp, () -> {
+	public static int sum(final Account[] accounts) {
+		return atomic((Txn txn) ->
+
+		{
 			int result = 0;
-			for(Account acc : tmp) {
-				result += acc.getBalance();
+			for (Account account : accounts) {
+				result += account.getBalance();
 			}
 			return result;
-		});
-
-		
-	}
-	
-	public static String toStr(final Account[] accounts) throws Exception {
-		final Account[] tmp = accounts.clone();
-		
-		Arrays.sort(tmp, (Account acc1, Account acc2) -> (acc1.id - acc2.id));
-		
-		return lockRecursively(tmp, () ->  Arrays.toString(tmp));
-	}
-	
-	private static <T> T lockRecursively(Account[] accounts, Callable<T>callable) throws Exception {
-		if(accounts.length > 0) {
-			accounts[0].lock.lock();
-			try {
-				return lockRecursively(Arrays.copyOfRange(accounts, 1, accounts.length), callable);
-			}finally {
-				accounts[0].lock.unlock();
-			}
-			
-		}else {
-			return callable.call();
 		}
+
+		);
 	}
+	
+	public static String toStr(final Account[] accounts)  {
+		return atomic((Txn txn)->{return Arrays.toString(accounts);});
+	}
+	
+	
 		
 }
