@@ -21,6 +21,7 @@ public class Application {
 
 	public static void main(String[] args) throws Exception {
 
+
 		final Account[] accounts = new Account[] {
 				new Account(100), new Account(0), 
 				new Account(100), new Account(0), 
@@ -100,6 +101,7 @@ public class Application {
 	}
 	
 	private static <T> T lockRecursively(Account[] accounts, Callable<T>callable) throws Exception {
+
 		if(accounts.length > 0) {
 			accounts[0].lock.lock();
 			try {
