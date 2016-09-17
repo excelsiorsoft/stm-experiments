@@ -75,12 +75,14 @@ public class Application {
 	}
 	
 	public static int sum(final Account[] accounts) throws Exception {
+		
+		//need an order in which locking is done
 		final Account[] tmp = accounts.clone();
 		final Comparator<Account> comparator = (acc1,  acc2) -> {return acc1.id - acc2.id;};
 		Arrays.sort(tmp, comparator);
 		
 		
-		
+		//locking done
 		return lockRecursively(tmp, () -> {
 			int result = 0;
 			for(Account acc : tmp) {
