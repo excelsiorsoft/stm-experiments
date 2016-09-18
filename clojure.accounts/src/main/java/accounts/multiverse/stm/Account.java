@@ -39,7 +39,6 @@ public class Account {
 	}
 
 	public  int getBalance() {
-		// TODO Auto-generated method stub
 		return (Integer) balance.deref();
 	}
 	
