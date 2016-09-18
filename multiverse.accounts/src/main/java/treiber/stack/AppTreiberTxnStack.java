@@ -9,13 +9,13 @@ import org.multiverse.api.StmUtils;
  * @author Simeon
  *
  */
-public class AppTreiberStack {
+public class AppTreiberTxnStack {
 
 	
 	public static void main(String[] args) {
 		
-		final TreiberTxStack<String> stack0 = new TreiberTxStack<>();
-		final TreiberTxStack<String> stack1 = new TreiberTxStack<>();
+		final TreiberTxnStack<String> stack0 = new TreiberTxnStack<>();
+		final TreiberTxnStack<String> stack1 = new TreiberTxnStack<>();
 		
 		new Thread(new Runnable() {
 
