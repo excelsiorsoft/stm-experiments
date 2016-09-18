@@ -15,7 +15,7 @@ public class Account {
 		LockingTransaction.runInTransaction(()->{
 			if(amount > 0) {
 				balance.set(getBalance() + amount);
-				System.out.println("Deposited "+amount+ " will it stay?");
+				//System.out.println("Deposited "+amount+ " will it stay?");
 			}
 			return null;
 		});
