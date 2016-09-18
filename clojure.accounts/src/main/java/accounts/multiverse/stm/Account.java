@@ -13,8 +13,10 @@ public class Account {
 	
 	public void deposit(final int amount) throws Exception {
 		LockingTransaction.runInTransaction(()->{
-			if(amount > 0)
+			if(amount > 0) {
 				balance.set(getBalance() + amount);
+				System.out.println("Deposited "+amount+ " will it stay?");
+			}
 			return null;
 		});
 		/*if(amount > 0)
@@ -27,7 +29,7 @@ public class Account {
 			if(amount > 0 && getBalance() >= amount) {
 				balance.set(getBalance() - amount);
 			}else {
-				throw new RuntimeException("not enought money!");
+				throw new RuntimeException("not enough money!");
 			}
 			return null;
 		});
